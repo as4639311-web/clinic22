@@ -1,0 +1,64 @@
+# Tawazun Clinic — project settings (production)
+
+app:
+  name: "Tawazun Clinic"
+  version: "0.1.0"
+  default_locale: "ar"
+  supported_locales: ["ar", "en"]
+  timezone: "Asia/Dubai"
+  api_prefix: "/api"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  cors_origins:
+    - "https://app.tawazun.example"
+
+auth:
+  access_token_minutes: 30
+  algorithm: "HS256"
+  password_min_length: 10
+
+privacy:
+  locked_sections: ["mental"]
+  encrypted_services: ["mental"]
+  default_share_days: 30
+  audit_access: true
+
+booking:
+  slot_minutes: 45
+  days_ahead: 30
+  work_hours: { start: "09:00", end: "21:00" }
+  reminders_hours_before: [24, 1]
+
+plans:
+  low_adherence_threshold: 0.6
+
+logging:
+  level: "INFO"
+  dir: "log"
+  file: "app.log"
+  max_bytes: 10485760
+  backup_count: 10
+
+llm:
+  provider: "openai"
+  timeout_seconds: 45
+  temperature: 0.2
+  max_tokens: 700
+  system_prompt: >
+    You are the Tawazun Clinic health-education assistant. Answer general
+    questions about mental wellbeing, fitness, sports medicine, nutrition and
+    health education in simple, calm language, in the user's language.
+    You never diagnose, prescribe, or change a treatment plan. For anything
+    personal or medical, advise booking with a specialist. If the user mentions
+    being in danger or wanting to harm themselves, tell them to contact local
+    emergency services immediately and offer the in-app support line.
+  providers:
+    ollama:
+      model: "llama3.1:8b"
+    openai:
+      model: "gpt-4o-mini"
+    openai_compatible:
+      model: "local-model"

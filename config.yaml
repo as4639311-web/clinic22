@@ -1,0 +1,72 @@
+# Tawazun Clinic — project settings (development)
+# Environment-specific values (secrets, URLs, DB) live in .env / .env.prod.
+
+app:
+  name: "Tawazun Clinic"
+  version: "0.1.0"
+  default_locale: "ar"          # ar | en
+  supported_locales: ["ar", "en"]
+  timezone: "Asia/Dubai"
+  api_prefix: "/api"
+
+server:
+  host: "127.0.0.1"
+  port: 8000
+  reload: true
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://127.0.0.1:5173"
+
+auth:
+  access_token_minutes: 60
+  algorithm: "HS256"
+  password_min_length: 8
+
+privacy:
+  # Sensitivity levels that require re-confirmation before they are returned
+  locked_sections: ["mental"]
+  # Consultation notes for these services are encrypted at rest (field level)
+  encrypted_services: ["mental"]
+  default_share_days: 30
+  audit_access: true
+
+booking:
+  slot_minutes: 45
+  days_ahead: 14
+  work_hours: { start: "09:00", end: "21:00" }
+  reminders_hours_before: [24, 1]
+
+plans:
+  low_adherence_threshold: 0.6   # flag plan for review below this ratio
+
+logging:
+  level: "DEBUG"
+  dir: "log"
+  file: "app.log"
+  max_bytes: 5242880
+  backup_count: 5
+
+llm:
+  # Active provider: ollama | openai | openai_compatible
+  provider: "ollama"
+  timeout_seconds: 60
+  temperature: 0.3
+  max_tokens: 700
+  system_prompt: >
+    You are the Tawazun Clinic health-education assistant. Answer general
+    questions about mental wellbeing, fitness, sports medicine, nutrition and
+    health education in simple, calm language, in the user's language.
+    You never diagnose, prescribe, or change a treatment plan. For anything
+    personal or medical, advise booking with a specialist. If the user mentions
+    being in danger or wanting to harm themselves, tell them to contact local
+    emergency services immediately and offer the in-app support line.
+  providers:
+    ollama:
+      model: "llama3.1:8b"
+      # base_url comes from OLLAMA_BASE_URL in .env
+    openai:
+      model: "gpt-4o-mini"
+      # api key comes from OPENAI_API_KEY in .env
+    openai_compatible:
+      model: "local-model"
+      # base_url / key from OPENAI_COMPAT_BASE_URL / OPENAI_COMPAT_API_KEY
